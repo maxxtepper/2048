@@ -1,6 +1,7 @@
 #ifndef SQUARE_H
 #define SQUARE_H
 
+#include <stdint.h>
 #include "Global.h"
 #include "Piece.h"
 
@@ -14,9 +15,8 @@ class Square {
     void setPiece(Piece* pc) {resident_pc=pc;}
 		void setNeighbor(int direction, Square *sqr);
 
-		bool checkNeighborPiece(int direction);
 		bool checkNeighborValue(int direction);
-		bool checkNeighborChange(int direction);
+		bool checkNeighborMain(int direction);
 
 		void createPiece(uint8_t rand_val);
 		void destroyPiece();

@@ -1,7 +1,7 @@
 CC=g++
-CFLAGS=-g -c -Wall -Werror
+CFLAGS=-g -c -Wall -Werror -std=c++11
 LDFLAGS=
-SOURCES=UniformRandom.cc Board.cc Square.cc Piece.cc 2048Engine.cc main.cc
+SOURCES=UniformRandom.cc Board.cc Square.cc Piece.cc Engine2048.cc main.cc
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=main
 

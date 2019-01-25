@@ -1,38 +1,55 @@
 #include <iostream>
+#include <string>
 #include <random>
 #include "Global.h"
-#include "2048Engine.h"
+#include "Engine2048.h"
 
 int chooseDirection();
-void printBoard(Board *brd);
 
 int main() {
 	//////////////////////////////////////////////////////
 	////		Create the 2048 Engine
 	//////////////////////////////////////////////////////
-	2048Engine *engine2048;
-	engine2048 = new 2048Engine();
-	
+	Engine2048 *engine2048;
+	engine2048 = new Engine2048();
+
 	//////////////////////////////////////////////////////
 	////		Start the Game
 	//////////////////////////////////////////////////////
 	bool game_state;
 	uint8_t direction;
-	bool dir_success;
+	bool input_success=false;
+	std::string input;
 	while (game_state) {
-		printBoard(brd);
+		engine2048->printBoard();
 		game_state = engine2048->beginningPhase();
 		if (game_state) {
-			while (!dir_success) {
-				direction   = cntrlr->getDirection();
-				dir_success = engine2048->mainPhase(direction);
+			input_success = false;
+			while (!input_success) {
+				//direction   = cntrlr->getDirection();
+				std::cout << "Enter next move: ";
+				while (!input_success) {
+					input_success = true;
+					std::cin >> input;
+					std::cout << std::endl;
+					if (input == "w") direction = UP;
+					else if (input == "s") direction = DOWN;
+					else if (input == "a") direction = LEFT;
+					else if (input == "d") direction = RIGHT;
+					else {
+						std::cout << "Try again: ";
+						input_success = false;
+					}
+				}
+				game_state = engine2048->mainPhase(direction);
 			}
 			engine2048->endPhase();
 		} else {
 			//	Game ends
+			std::cout << "The Game Is Over.\n";
 		}
 	}
-  return 0;
+	return 0;
 }
 
 int chooseDirection() {
@@ -52,18 +69,3 @@ int chooseDirection() {
 	return 0;
 }
 
-void printBoard(Board *brd) {
-	for (int y=3; y>=0; y--) {
-		std::cout << "----------------------------------\n";
-		std::cout << "|  ";
-		for (int x=0; x<4; x++) {
-			int value;
-			value = brd->getSquarePieceValue(x,y);
-			if (value) std::cout << value;
-			else std::cout << "  ";
-			if (x<3) std::cout << "  |  ";
-			else std::cout << "  |" << std::endl;
-		}
-	}
-	std::cout << "----------------------------------\n";
-}

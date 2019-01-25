@@ -1,11 +1,8 @@
-#include "2048Engine.h"
+#include "Engine2048.h"
 
-2048Engine::2048Engine() {
+Engine2048::Engine2048() {
 	//	Make the board
 	brd = new Board();
-
-	//	Make the random number generator
-	unirand = new UniformRandom();
 
 	//	Game state variables
 	game_state = false;
@@ -21,10 +18,10 @@
 	
 }
 
-2048Engine::~2048Engine() {
+Engine2048::~Engine2048() {
 }
 
-bool 2048Engine::beginningPhase() {
+bool Engine2048::beginningPhase() {
 	//	Generate list of empty squares
 	empty_sqrs_cnt = brd->generateEmptySquaresList();
 	//	Generate random piece for random empty square
@@ -37,7 +34,7 @@ bool 2048Engine::beginningPhase() {
 	return game_state;
 }
 
-bool 2048Engine::mainPhase(uint8_t direction) {
+bool Engine2048::mainPhase(uint8_t direction) {
 	bool dir_success, temp;
 	//	Try to slide the pieces
 	switch(direction) {
@@ -74,12 +71,28 @@ bool 2048Engine::mainPhase(uint8_t direction) {
 					}
 			break;
 	}
-	return temp;
+	return dir_success;
 }
 
-void 2048Engine::endPhase() {
+void Engine2048::endPhase() {
 	//	Clear list of empty squares
 	
 	//	Reset change states
 	brd->resetChangeStates();
+}
+
+void Engine2048::printBoard() {
+	for (int y=3; y>=0; y--) {
+		std::cout << "----------------------------------\n";
+		std::cout << "|  ";
+		for (int x=0; x<4; x++) {
+			int value;
+			value = brd->getSquarePieceValue(x,y);
+			if (value) std::cout << value;
+			else std::cout << "  ";
+			if (x<3) std::cout << "  |  ";
+			else std::cout << "  |" << std::endl;
+		}
+	}
+	std::cout << "----------------------------------\n";
 }

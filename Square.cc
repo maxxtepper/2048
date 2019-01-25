@@ -20,53 +20,48 @@ void Square::setNeighbor(int direction, Square *sqr) {
 	neighbor_sqr[direction] = sqr;
 }
 
-bool Square::checkNeighborPiece(int direction) {
+bool Square::checkNeighborValue(int direction) {
 	Piece *neighbor_pc;
 	neighbor_pc = neighbor_sqr[direction]->getPiece();
-	if (neighbor_pc)
+	int neighbor_val = neighbor_pc->getValue();
+	int resident_val = resident_pc->getValue();
+	if (neighbor_val==resident_val)
 		return true;
 	else
 		return false;
 }
 
-bool Square::checkNeighborValue(int direction) {
+bool Square::checkNeighborMain(int direction) {
+	bool success = false;
 	Piece *neighbor_pc;
 	neighbor_pc = neighbor_sqr[direction]->getPiece();
-	if (!neighbor_pc)
-		return false;
-	else {
-		int neighbor_value, resident_value;
-		neighbor_value = neighbor_pc->getValue();
-		resident_value = resident_pc->getValue();
-		if (resident_value == neighbor_value)
-			return true;
-		else 
-			return false;
-	}
-}
-
-bool Square::checkNeighborChange(int direction) {
-	Piece *neighbor_pc;
-	neighbor_pc = neighbor_sqr[direction]->getPiece();
-	bool neighbor_chng, resident_chng;
-	neighbor_chng = neighbor_pc->getChangeState();
-	resident_chng = resident_pc->getChangeState();
-	if (!resident_chng && !neighbor_chng)
-		// finish this
-		// also, make sure that the changeState
-		// is only called when pieces combine,
-		// and not when pieces slide into an empty
-		// square.
+	if (!neighbor_pc) {
+		//	If the neighbor square is empty
+		neighbor_sqr[direction]->setPiece(resident_pc);
+		resident_pc = NULL;
+		success = true;
+	} else {
+		bool neighbor_chng, resident_chng;
+		neighbor_chng = neighbor_pc->getChangeState();
+		resident_chng = resident_pc->getChangeState();
+		if (!resident_chng && !neighbor_chng) {
+			//	If they pieces have not been combined yet
+			int neighbor_val = neighbor_pc->getValue();
+			int resident_val = resident_pc->getValue();
+			if (neighbor_val==resident_val) {
+				//	If the values are the same
 				destroyPiece();
 				neighbor_pc->incrimentValue();
 				success = true;
+			} else {
+				//	The resident and neighbor cannot combine
+				success = false;
 			}
 		} else {
-			neighbor_sqr[direction]->setPiece(resident_pc);
-			resident_pc = NULL;
-			success = true;
+			//	The resident and/or neighbor have already combined
+			success = false;
 		}
-	} 
+	}
 	return success;
 }
 

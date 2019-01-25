@@ -97,13 +97,7 @@ void Board::generateNewPiece() {
 
 bool Board::tryDirection(uint8_t x, uint8_t y, uint8_t  direction) {
 	bool check_state;
-	check_state = sqr[x][y]->checkNeighborPiece(direction);
-	if (check_state) {
-		check_state = sqr[x][y]->checkNeighborValue(direction);
-		if (check_state) {
-		check_state = sqr[x][y]->checkNeighborChange(direction);
-		}
-	}
+	check_state = sqr[x][y]->checkNeighborMain(direction);
 	return check_state;
 }
 
