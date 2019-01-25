@@ -1,13 +1,17 @@
-CC = g++
-CFLAGS = -Wall
-LDFLAGS = 
-OBJFILES = main.o 
-TARGET = main
+CC=g++
+CFLAGS=-g -c -Wall -Werror
+LDFLAGS=
+SOURCES=UniformRandom.cc Board.cc Square.cc Piece.cc 2048Engine.cc main.cc
+OBJECTS=$(SOURCES:.cc=.o)
+EXECUTABLE=main
 
-all: $(TARGET)
+all: $(SOURCES) $(EXECUTABLE)
 
-$(TARGET): $(OBJFILES)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJFILES) $(LDFLAGS)
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+
+.cc.o:
+	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -f $(OBJFILES) $(TARGET) *~
+	rm $(OBJECTS) $(EXECUTABLE)
