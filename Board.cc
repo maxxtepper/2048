@@ -34,6 +34,9 @@ Board::Board() {
 			}
 		}
 	}
+
+	//	Make the random number generator
+	unirand = new UniformRandom();
 }
 
 Board::~Board() {
@@ -42,6 +45,7 @@ Board::~Board() {
       delete sqr[x][y];
     }
   }
+	delete unirand;
 }
 
 void Board::resetChangeStates() {
@@ -52,9 +56,9 @@ void Board::resetChangeStates() {
 
 int Board::generateEmptySquaresList() {
 	empty_sqrs_cnt = 0;
+	Piece *pc;
 	for (int x=0; x<4; x++)
 		for (int y=0; y<4; y++) {
-			Piece *pc;
 			pc = sqr[x][y]->getPiece();
 			if (!pc) {
 				empty_sqrs_cnt++;
@@ -62,6 +66,10 @@ int Board::generateEmptySquaresList() {
 			}
 		}
 	return empty_sqrs_cnt;
+}
+
+void Board::clearEmptySquaresList() {
+	empty_sqrs.clear();
 }
 
 bool Board::legalMoveState() {
@@ -85,13 +93,17 @@ bool Board::legalMoveState() {
 
 void Board::generateNewPiece() {
 	//	Generate random piece for random empty square
-	uint8_t rand_sqr, rand_val;
+	int rand_sqr, rand_val;
+	std::cout << "Here\n";
 	rand_sqr = unirand->drawNumber(0,empty_sqrs_cnt-1);
+	std::cout << "Here\n";
 	rand_val = unirand->drawNumber(0,100);
+	std::cout << "Here\n";
 	if (rand_val > 90)
 		rand_val = 4;
 	else
 		rand_val = 2;
+	std::cout << "Making the piece\n";
 	empty_sqrs[rand_sqr]->createPiece(rand_val);
 }
 

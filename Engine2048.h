@@ -18,7 +18,7 @@ class Engine2048 {
 		~Engine2048();
 
 		bool game_state;
-		uint8_t empty_sqrs_cnt;
+		int empty_sqrs_cnt;
 
 	private:
 		Board *brd;

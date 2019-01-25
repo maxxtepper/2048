@@ -65,7 +65,7 @@ bool Square::checkNeighborMain(int direction) {
 	return success;
 }
 
-void Square::createPiece(uint8_t rand_val) {
+void Square::createPiece(int rand_val) {
 	resident_pc = new Piece();
 	resident_pc->setValue(rand_val);
 }

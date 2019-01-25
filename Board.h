@@ -2,6 +2,7 @@
 #define BOARD_H
 
 #include <stdlib.h>
+#include <iostream>
 #include <vector>
 #include <time.h>
 #include "Global.h"
@@ -14,6 +15,7 @@ class Board {
     ~Board();
 		void resetChangeStates();
 		int generateEmptySquaresList();
+		void clearEmptySquaresList();
 
 		void generateNewPiece();
 

@@ -18,7 +18,7 @@ class Square {
 		bool checkNeighborValue(int direction);
 		bool checkNeighborMain(int direction);
 
-		void createPiece(uint8_t rand_val);
+		void createPiece(int rand_val);
 		void destroyPiece();
 
     Piece *resident_pc;

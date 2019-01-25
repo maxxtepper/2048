@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <random>
 #include "Global.h"
 #include "Engine2048.h"
 
@@ -10,44 +9,33 @@ int main() {
 	//////////////////////////////////////////////////////
 	////		Create the 2048 Engine
 	//////////////////////////////////////////////////////
+	std::cout << "Starting engine...\n";
 	Engine2048 *engine2048;
 	engine2048 = new Engine2048();
+	std::cout << "engin SUCCESS\n";
 
 	//////////////////////////////////////////////////////
 	////		Start the Game
 	//////////////////////////////////////////////////////
-	bool game_state;
+	bool game_state=false;
 	uint8_t direction;
-	bool input_success=false;
+	bool dir_success=false;
 	std::string input;
-	while (game_state) {
+	while (!game_state) {
 		engine2048->printBoard();
 		game_state = engine2048->beginningPhase();
-		if (game_state) {
-			input_success = false;
-			while (!input_success) {
-				//direction   = cntrlr->getDirection();
-				std::cout << "Enter next move: ";
-				while (!input_success) {
-					input_success = true;
-					std::cin >> input;
-					std::cout << std::endl;
-					if (input == "w") direction = UP;
-					else if (input == "s") direction = DOWN;
-					else if (input == "a") direction = LEFT;
-					else if (input == "d") direction = RIGHT;
-					else {
-						std::cout << "Try again: ";
-						input_success = false;
-					}
-				}
-				game_state = engine2048->mainPhase(direction);
+		if (!game_state) {
+			dir_success = false;
+			while (!dir_success) {
+				direction = chooseDirection();
+				dir_success = engine2048->mainPhase(direction);
 			}
 			engine2048->endPhase();
 		} else {
 			//	Game ends
 			std::cout << "The Game Is Over.\n";
 		}
+		delete engine2048;
 	}
 	return 0;
 }

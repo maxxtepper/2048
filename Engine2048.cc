@@ -2,23 +2,29 @@
 
 Engine2048::Engine2048() {
 	//	Make the board
+	std::cout << "Making the board...";
 	brd = new Board();
+	std::cout << "SUCCESS\n";
 
 	//	Game state variables
 	game_state = false;
 	empty_sqrs_cnt = 0;
 
 	//	Setup the board
-	//	Generate list of empty squares
-	empty_sqrs_cnt = brd->generateEmptySquaresList();
 	//	First starting piece
+	empty_sqrs_cnt = brd->generateEmptySquaresList();
+	std::cout << "count = " << empty_sqrs_cnt << std::endl;
 	brd->generateNewPiece();
+	std::cout << "Made the first piece\n";
 	//	Second starting piece
+	empty_sqrs_cnt = brd->generateEmptySquaresList();
+	std::cout << "count = " << empty_sqrs_cnt << std::endl;
 	brd->generateNewPiece();
-	
+	std::cout << "Made the second piece\n";
 }
 
 Engine2048::~Engine2048() {
+	delete brd;
 }
 
 bool Engine2048::beginningPhase() {
@@ -76,6 +82,8 @@ bool Engine2048::mainPhase(uint8_t direction) {
 
 void Engine2048::endPhase() {
 	//	Clear list of empty squares
+	empty_sqrs_cnt=0;
+	brd->clearEmptySquaresList();
 	
 	//	Reset change states
 	brd->resetChangeStates();
