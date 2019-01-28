@@ -12,7 +12,7 @@ int main() {
 	std::cout << "Starting engine...\n";
 	Engine2048 *engine2048;
 	engine2048 = new Engine2048();
-	std::cout << "engin SUCCESS\n";
+	std::cout << "engine SUCCESS\n";
 
 	//////////////////////////////////////////////////////
 	////		Start the Game
@@ -30,12 +30,9 @@ int main() {
 				direction = chooseDirection();
 				dir_success = engine2048->mainPhase(direction);
 			}
-			std::cout << "Ending...\n";
 			engine2048->endPhase();
-			std::cout << "Done!\n";
 		} else {
 			//	Game ends
-			std::cout << "The Game Is Over.\n";
 		}
 	}
 	delete engine2048;
@@ -44,7 +41,6 @@ int main() {
 
 int chooseDirection() {
 	char direction[1];
-	std::cout << "Choose a direction: ";
 	std::cin >> direction[0];
 	switch(direction[0]) {
 		case 'w':

@@ -54,7 +54,7 @@ void Board::resetChangeStates() {
 			sqr[x][y]->resetChangeState();
 }
 
-int Board::generateEmptySquaresList() {
+void Board::generateEmptySquaresList() {
 	empty_sqrs.clear();
 	empty_sqrs_cnt = 0;
 	Piece *pc;
@@ -66,10 +66,10 @@ int Board::generateEmptySquaresList() {
 				empty_sqrs.push_back(sqr[x][y]);
 			}
 		}
-	return empty_sqrs_cnt;
 }
 
 bool Board::legalMoveState() {
+	generateEmptySquaresList();
 	//	If false, gameover!
 	if (empty_sqrs_cnt == 0) {
 		//	Have all squares check neighbors
@@ -101,10 +101,8 @@ void Board::generateNewPiece() {
 }
 
 bool Board::tryDirection(int x, int y, int  direction) {
-	bool check_state;
-	std::cout << x << "," << y << "," << direction << std::endl;
+	bool check_state = false;
 	check_state = sqr[x][y]->checkNeighborMain(direction);
-	std::cout << "Got state: " << check_state << std::endl;
 	return check_state;
 }
 

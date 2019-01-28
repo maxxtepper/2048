@@ -21,14 +21,18 @@ void Square::setNeighbor(int direction, Square *sqr) {
 }
 
 bool Square::checkNeighborValue(int direction) {
-	Piece *neighbor_pc;
-	neighbor_pc = neighbor_sqr[direction]->getPiece();
-	int neighbor_val = neighbor_pc->getValue();
-	int resident_val = resident_pc->getValue();
-	if (neighbor_val==resident_val)
-		return true;
-	else
+	if (neighbor_sqr[direction]) {
+		Piece *neighbor_pc;
+		neighbor_pc = neighbor_sqr[direction]->getPiece();
+		int neighbor_val = neighbor_pc->getValue();
+		int resident_val = resident_pc->getValue();
+		if (neighbor_val==resident_val)
+			return true;
+		else
+			return false;
+	} else {
 		return false;
+	}
 }
 
 bool Square::checkNeighborMain(int direction) {
@@ -70,6 +74,7 @@ bool Square::checkNeighborMain(int direction) {
 			success = false;
 		}
 	} else {
+		//	The neighbor square is null
 		success = false;
 	}
 	return success;

@@ -6,11 +6,10 @@ Engine2048::Engine2048() {
 
 	//	Game state variables
 	game_state = false;
-	empty_sqrs_cnt = 0;
 
 	//	Setup the board
 	//	First starting piece
-	empty_sqrs_cnt = brd->generateEmptySquaresList();
+	brd->generateEmptySquaresList();
 	brd->generateNewPiece();
 }
 
@@ -20,26 +19,25 @@ Engine2048::~Engine2048() {
 
 bool Engine2048::beginningPhase() {
 	//	Generate list of empty squares
-	empty_sqrs_cnt = brd->generateEmptySquaresList();
+	brd->generateEmptySquaresList();
 	//	Generate random piece for random empty square
 	brd->generateNewPiece();
-	
-	//	If no empty squares, check legal moves
-	if (empty_sqrs_cnt == 0)
-		game_state = brd->legalMoveState();
+
+	//	Check for a gameover
+	game_state = !(brd->legalMoveState());
 
 	return game_state;
 }
 
 bool Engine2048::mainPhase(int direction) {
-	bool dir_success, temp;
+	bool temp = false;
+	bool dir_success = false;
 	//	Try to slide the pieces
 	switch(direction) {
 		case UP:
 			for (int iter=2; iter>=0; iter--)
 				for (int y=iter; y<3; y++)
 					for (int x=0; x<4; x++) {
-						std::cout << "Trying up...\n";
 						temp = brd->tryDirection(x,y,direction);
 						if (temp) dir_success = temp;
 					}
@@ -69,14 +67,10 @@ bool Engine2048::mainPhase(int direction) {
 					}
 			break;
 	}
-	std::cout << "Direction Success: " << dir_success << std::endl;
 	return dir_success;
 }
 
 void Engine2048::endPhase() {
-	//	Clear list of empty squares
-	empty_sqrs_cnt=0;
-	
 	//	Reset change states
 	brd->resetChangeStates();
 }

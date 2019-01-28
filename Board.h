@@ -14,7 +14,7 @@ class Board {
     Board();
     ~Board();
 		void resetChangeStates();
-		int generateEmptySquaresList();
+		void generateEmptySquaresList();
 
 		void generateNewPiece();
 
