@@ -10,7 +10,7 @@ class Engine2048 {
 		Engine2048();
 
 		bool beginningPhase();
-		bool mainPhase(uint8_t);
+		bool mainPhase(int);
 		void endPhase();
 
 		void printBoard();

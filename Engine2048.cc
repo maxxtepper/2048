@@ -2,9 +2,7 @@
 
 Engine2048::Engine2048() {
 	//	Make the board
-	std::cout << "Making the board...";
 	brd = new Board();
-	std::cout << "SUCCESS\n";
 
 	//	Game state variables
 	game_state = false;
@@ -13,14 +11,7 @@ Engine2048::Engine2048() {
 	//	Setup the board
 	//	First starting piece
 	empty_sqrs_cnt = brd->generateEmptySquaresList();
-	std::cout << "count = " << empty_sqrs_cnt << std::endl;
 	brd->generateNewPiece();
-	std::cout << "Made the first piece\n";
-	//	Second starting piece
-	empty_sqrs_cnt = brd->generateEmptySquaresList();
-	std::cout << "count = " << empty_sqrs_cnt << std::endl;
-	brd->generateNewPiece();
-	std::cout << "Made the second piece\n";
 }
 
 Engine2048::~Engine2048() {
@@ -40,7 +31,7 @@ bool Engine2048::beginningPhase() {
 	return game_state;
 }
 
-bool Engine2048::mainPhase(uint8_t direction) {
+bool Engine2048::mainPhase(int direction) {
 	bool dir_success, temp;
 	//	Try to slide the pieces
 	switch(direction) {
@@ -48,6 +39,7 @@ bool Engine2048::mainPhase(uint8_t direction) {
 			for (int iter=2; iter>=0; iter--)
 				for (int y=iter; y<3; y++)
 					for (int x=0; x<4; x++) {
+						std::cout << "Trying up...\n";
 						temp = brd->tryDirection(x,y,direction);
 						if (temp) dir_success = temp;
 					}
@@ -77,13 +69,13 @@ bool Engine2048::mainPhase(uint8_t direction) {
 					}
 			break;
 	}
+	std::cout << "Direction Success: " << dir_success << std::endl;
 	return dir_success;
 }
 
 void Engine2048::endPhase() {
 	//	Clear list of empty squares
 	empty_sqrs_cnt=0;
-	brd->clearEmptySquaresList();
 	
 	//	Reset change states
 	brd->resetChangeStates();

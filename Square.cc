@@ -33,34 +33,44 @@ bool Square::checkNeighborValue(int direction) {
 
 bool Square::checkNeighborMain(int direction) {
 	bool success = false;
-	Piece *neighbor_pc;
-	neighbor_pc = neighbor_sqr[direction]->getPiece();
-	if (!neighbor_pc) {
-		//	If the neighbor square is empty
-		neighbor_sqr[direction]->setPiece(resident_pc);
-		resident_pc = NULL;
-		success = true;
-	} else {
-		bool neighbor_chng, resident_chng;
-		neighbor_chng = neighbor_pc->getChangeState();
-		resident_chng = resident_pc->getChangeState();
-		if (!resident_chng && !neighbor_chng) {
-			//	If they pieces have not been combined yet
-			int neighbor_val = neighbor_pc->getValue();
-			int resident_val = resident_pc->getValue();
-			if (neighbor_val==resident_val) {
-				//	If the values are the same
-				destroyPiece();
-				neighbor_pc->incrimentValue();
+	//	First check to see if neighbor is null
+	if (neighbor_sqr[direction]) {
+		if (resident_pc) {
+			Piece *neighbor_pc;
+			neighbor_pc = neighbor_sqr[direction]->getPiece();
+			if (!neighbor_pc) {
+				//	If the neighbor square is empty
+				neighbor_sqr[direction]->setPiece(resident_pc);
+				resident_pc = NULL;
 				success = true;
 			} else {
-				//	The resident and neighbor cannot combine
-				success = false;
+				bool neighbor_chng, resident_chng;
+				neighbor_chng = neighbor_pc->getChangeState();
+				resident_chng = resident_pc->getChangeState();
+				if (!resident_chng && !neighbor_chng) {
+					//	If they pieces have not been combined yet
+					int neighbor_val = neighbor_pc->getValue();
+					int resident_val = resident_pc->getValue();
+					if (neighbor_val==resident_val) {
+						//	If the values are the same
+						destroyPiece();
+						neighbor_pc->incrimentValue();
+						success = true;
+					} else {
+						//	The resident and neighbor cannot combine
+						success = false;
+					}
+				} else {
+					//	The resident and/or neighbor have already combined
+					success = false;
+				}
 			}
 		} else {
-			//	The resident and/or neighbor have already combined
+			//	There is no resident piece
 			success = false;
 		}
+	} else {
+		success = false;
 	}
 	return success;
 }

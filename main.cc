@@ -18,25 +18,27 @@ int main() {
 	////		Start the Game
 	//////////////////////////////////////////////////////
 	bool game_state=false;
-	uint8_t direction;
+	int direction;
 	bool dir_success=false;
 	std::string input;
 	while (!game_state) {
-		engine2048->printBoard();
 		game_state = engine2048->beginningPhase();
+		engine2048->printBoard();
 		if (!game_state) {
 			dir_success = false;
 			while (!dir_success) {
 				direction = chooseDirection();
 				dir_success = engine2048->mainPhase(direction);
 			}
+			std::cout << "Ending...\n";
 			engine2048->endPhase();
+			std::cout << "Done!\n";
 		} else {
 			//	Game ends
 			std::cout << "The Game Is Over.\n";
 		}
-		delete engine2048;
 	}
+	delete engine2048;
 	return 0;
 }
 

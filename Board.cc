@@ -55,6 +55,7 @@ void Board::resetChangeStates() {
 }
 
 int Board::generateEmptySquaresList() {
+	empty_sqrs.clear();
 	empty_sqrs_cnt = 0;
 	Piece *pc;
 	for (int x=0; x<4; x++)
@@ -66,10 +67,6 @@ int Board::generateEmptySquaresList() {
 			}
 		}
 	return empty_sqrs_cnt;
-}
-
-void Board::clearEmptySquaresList() {
-	empty_sqrs.clear();
 }
 
 bool Board::legalMoveState() {
@@ -94,22 +91,20 @@ bool Board::legalMoveState() {
 void Board::generateNewPiece() {
 	//	Generate random piece for random empty square
 	int rand_sqr, rand_val;
-	std::cout << "Here\n";
 	rand_sqr = unirand->drawNumber(0,empty_sqrs_cnt-1);
-	std::cout << "Here\n";
 	rand_val = unirand->drawNumber(0,100);
-	std::cout << "Here\n";
 	if (rand_val > 90)
 		rand_val = 4;
 	else
 		rand_val = 2;
-	std::cout << "Making the piece\n";
 	empty_sqrs[rand_sqr]->createPiece(rand_val);
 }
 
-bool Board::tryDirection(uint8_t x, uint8_t y, uint8_t  direction) {
+bool Board::tryDirection(int x, int y, int  direction) {
 	bool check_state;
+	std::cout << x << "," << y << "," << direction << std::endl;
 	check_state = sqr[x][y]->checkNeighborMain(direction);
+	std::cout << "Got state: " << check_state << std::endl;
 	return check_state;
 }
 

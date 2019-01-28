@@ -15,17 +15,16 @@ class Board {
     ~Board();
 		void resetChangeStates();
 		int generateEmptySquaresList();
-		void clearEmptySquaresList();
 
 		void generateNewPiece();
 
-		bool tryDirection(uint8_t,uint8_t,uint8_t);
+		bool tryDirection(int,int,int);
 		int getSquarePieceValue(int x,int y);
 		int getRandomNumber(int);
 		bool legalMoveState();
 
 		std::vector<Square*> empty_sqrs;
-		uint8_t empty_sqrs_cnt;
+		int empty_sqrs_cnt;
 		UniformRandom *unirand;
 
   private:
