@@ -1,11 +1,18 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 #include "Global.h"
 #include "Engine2048.h"
 
 int chooseDirection();
 
 int main() {
+	//////////////////////////////////////////////////////
+	////		Create the output data file
+	//////////////////////////////////////////////////////
+	std::fstream fout;
+	fout.open ("test.txt",std::fstream::out);
+
 	//////////////////////////////////////////////////////
 	////		Create the 2048 Engine
 	//////////////////////////////////////////////////////
@@ -17,6 +24,7 @@ int main() {
 	//////////////////////////////////////////////////////
 	////		Start the Game
 	//////////////////////////////////////////////////////
+	bstate_t board_state;
 	bool game_state=false;
 	int direction;
 	bool dir_success=false;
@@ -24,18 +32,27 @@ int main() {
 	while (!game_state) {
 		game_state = engine2048->beginningPhase();
 		engine2048->printBoard();
+		engine2048->holdBoardState();
 		if (!game_state) {
 			dir_success = false;
 			while (!dir_success) {
 				direction = chooseDirection();
 				dir_success = engine2048->mainPhase(direction);
 			}
+			board_state = engine2048->getHeldBoardState();
+
+			//	Save the data
+			for (int i=0; i<16; i++)
+				fout << board_state.sqr_val[i] << ",";
+			fout << direction << std::endl;
+
 			engine2048->endPhase();
 		} else {
 			//	Game ends
 		}
 	}
 	delete engine2048;
+	fout.close();
 	return 0;
 }
 

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <stdint.h>
 #include "Board.h"
+#include "Global.h"
 
 class Engine2048 {
 	public:
@@ -19,8 +20,13 @@ class Engine2048 {
 
 		bool game_state;
 
+
+		void holdBoardState();
+		bstate_t getHeldBoardState();
+
 	private:
 		Board *brd;
+		bstate_t board_state;
 };
 
 #endif

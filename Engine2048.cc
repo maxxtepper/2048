@@ -90,3 +90,19 @@ void Engine2048::printBoard() {
 	}
 	std::cout << "----------------------------------\n";
 }
+
+void Engine2048::holdBoardState() {
+	int count=0;
+	for (int y=3; y>=0; y--) {
+		for (int x=0; x<4; x++) {
+			board_state.sqr_val[count]=brd->getSquarePieceValue(x,y);
+			count++;
+		}
+	}
+}
+
+bstate_t Engine2048::getHeldBoardState() {
+	return board_state;
+}
+
+
