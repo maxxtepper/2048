@@ -6,12 +6,22 @@
 
 int chooseDirection();
 
-int main() {
+int main(int argc, char* argv[]) {
+	//////////////////////////////////////////////////////
+	////		Process Inputs
+	//////////////////////////////////////////////////////
+	if (argc!=2) {
+		std::cout << "Usage: ./main game_id\n";
+		return 0;
+	}
+
+	std::string game_id = argv[1];
+
 	//////////////////////////////////////////////////////
 	////		Create the output data file
 	//////////////////////////////////////////////////////
 	std::fstream fout;
-	fout.open ("test.txt",std::fstream::out);
+	fout.open ("data_" + game_id + ".txt",std::fstream::out);
 
 	//////////////////////////////////////////////////////
 	////		Create the 2048 Engine
