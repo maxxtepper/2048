@@ -1,5 +1,9 @@
 This is the README for 2048
 
-I have dumped some version of my 2048 engine into this git.
-I have no idea what the working state is of this engine. I have had a working engine in the past.
-This engine does not compile. Will make work.
+This engine is now capable of human play with data recording.
+Data recording is a comma delimited list of the board state, which are the values of the squares (for y, for x), followed by the direction of choice given the board state.
+
+
+To Add:
+"Plugin capabilities for NN training and testing"
+Somehow I need to make this work with a python program running at the same time. So maybe I have my python script run this exe in a shell, and the python script can run commands in the shell? And somehow I need to send the boardstate into the python program.....will need to research how to do this, there may be a better way.
