@@ -39,14 +39,15 @@ int main(int argc, char* argv[]) {
 		printf("ERROR: Could not find cwd!\n");
 		return -1;
 	}
-	
+
 	//////////////////////////////////////////////////////
 	////		ROOT Setup
 	//////////////////////////////////////////////////////
 	std::string pref;
 	std::string	fileName;
 	pref = pwd + "/raw_player_data/";
-	fileName = pref + "data_" + std::to_string(agent) + "_" + game_id + ".root";
+	fileName = pref + "data_" + std::to_string(agent) + "_" + game_id;
+	std::string fileNameR = fileName + ".root";
 
 	//	Tree and branch strings
 	std::string rT_id   = "game_cycle_tree";
@@ -55,11 +56,18 @@ int main(int argc, char* argv[]) {
 
 	//	Mode
 	//	Create file
-	TFile *outFile = TFile::Open(fileName.c_str(), "RECREATE");
+	TFile *outFile = TFile::Open(fileNameR.c_str(), "RECREATE");
 	TTree *rawT = new TTree(rT_id.c_str(),rT_name.c_str());
 	TBranch *cycleB = new TBranch();
 
 	cycleB = rawT->Branch(br_id.c_str(), cycle.bstate,"cycle.bstate/I");
+
+	//////////////////////////////////////////////////////
+	////		Output Text File Setup
+	//////////////////////////////////////////////////////
+	std::fstream fout;
+	std::string fileNameT = fileName + ".txt";
+	fout.open(fileNameT, std::fstream::out);
 
 	//////////////////////////////////////////////////////
 	////		Create the 2048 Engine
@@ -89,7 +97,12 @@ int main(int argc, char* argv[]) {
 			cycle.bstate = engine2048->getHeldBoardState();
 			cycle.direction = direction;
 
-			//	Save the data
+			//	Save the data to ROOT
+			for (int i=0; i<16; i++)
+				fout << cycle.bstate[i] << ",";
+			fout << cycle.direction << std::endl;
+
+			//	Save the data to ROOT
 			rawT->Fill();
 
 			engine2048->endPhase();
@@ -100,6 +113,7 @@ int main(int argc, char* argv[]) {
 	delete engine2048;
 	rawT->Write();
 	outFile->Close();
+	fout.close();
 	return 0;
 }
 
