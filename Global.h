@@ -3,8 +3,9 @@
 
 enum {UP,DOWN,LEFT,RIGHT};
 
-struct bstate_t {
-	int sqr_val[16];
+struct gcycle_t {
+	int *bstate;
+	int direction;
 };
 
 #endif

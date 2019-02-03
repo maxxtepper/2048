@@ -1,6 +1,6 @@
 CC=g++
-CFLAGS=-g -c -Wall -Werror -std=c++11
-LDFLAGS=
+CFLAGS=-c -std=c++11 -fPIC `root-config --cflags`
+LDFLAGS=`root-config --libs`
 SOURCES=UniformRandom.cc Board.cc Square.cc Piece.cc Engine2048.cc main.cc
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=main
@@ -8,7 +8,7 @@ EXECUTABLE=main
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
 
 .cc.o:
 	$(CC) $(CFLAGS) $< -o $@

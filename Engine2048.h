@@ -2,6 +2,7 @@
 #define Engine2048_H
 
 #include <iostream>
+#include <iomanip>
 #include <stdint.h>
 #include "Board.h"
 #include "Global.h"
@@ -22,11 +23,12 @@ class Engine2048 {
 
 
 		void holdBoardState();
-		bstate_t getHeldBoardState();
+		int *getHeldBoardState();
 
 	private:
 		Board *brd;
-		bstate_t board_state;
+		int *gcycle;
+		int game_cycle[16];
 };
 
 #endif

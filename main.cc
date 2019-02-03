@@ -1,44 +1,81 @@
 #include <iostream>
+#include <stdlib.h>
+#include <stdio.h>
+#include <cstdint>
 #include <string>
 #include <fstream>
+#include <TFile.h>
+#include <TTree.h>
+#include <TBranch.h>
 #include "Global.h"
 #include "Engine2048.h"
 
-int chooseDirection();
+int chooseDirection0();
 
 int main(int argc, char* argv[]) {
 	//////////////////////////////////////////////////////
-	////		Process Inputs
+	////		Process Input Parameters
 	//////////////////////////////////////////////////////
-	if (argc!=2) {
-		std::cout << "Usage: ./main game_id\n";
-		return 0;
+	if (argc != 4) {
+		printf("Usage: ./main game_id mode agent\n\
+				game_id: id for data set\n\
+				mode:    0 = new; 	1 = load\n\
+				agent:   0 = human; 1 = NN\n"); return -1;
 	}
-
 	std::string game_id = argv[1];
+	int mode            = atoi(argv[2]);
+	int agent           = atoi(argv[3]);
 
+	gcycle_t cycle;
+	
 	//////////////////////////////////////////////////////
-	////		Create the output data file
+	////		Get pwd for File Saving
 	//////////////////////////////////////////////////////
-	std::fstream fout;
-	fout.open ("data_" + game_id + ".txt",std::fstream::out);
+	std::string pwd;
+	char cwd[1024];
+	if (getcwd(cwd,sizeof(cwd)) != NULL)
+		pwd = cwd;
+	else {
+		printf("ERROR: Could not find cwd!\n");
+		return -1;
+	}
+	
+	//////////////////////////////////////////////////////
+	////		ROOT Setup
+	//////////////////////////////////////////////////////
+	std::string pref;
+	std::string	fileName;
+	pref = pwd + "/raw_player_data/";
+	fileName = pref + "data_" + std::to_string(agent) + "_" + game_id + ".root";
+
+	//	Tree and branch strings
+	std::string rT_id   = "game_cycle_tree";
+	std::string rT_name = "Game Data - Board States and Direction Choices";
+	std::string br_id = "cycle";
+
+	//	Mode
+	//	Create file
+	TFile *outFile = TFile::Open(fileName.c_str(), "RECREATE");
+	TTree *rawT = new TTree(rT_id.c_str(),rT_name.c_str());
+	TBranch *cycleB = new TBranch();
+
+	cycleB = rawT->Branch(br_id.c_str(), cycle.bstate,"cycle.bstate/I");
 
 	//////////////////////////////////////////////////////
 	////		Create the 2048 Engine
 	//////////////////////////////////////////////////////
-	std::cout << "Starting engine...\n";
 	Engine2048 *engine2048;
 	engine2048 = new Engine2048();
-	std::cout << "engine SUCCESS\n";
 
 	//////////////////////////////////////////////////////
-	////		Start the Game
+	////		Start the Engine
 	//////////////////////////////////////////////////////
-	bstate_t board_state;
+	//	Pre-Engine Process
 	bool game_state=false;
 	int direction;
 	bool dir_success=false;
 	std::string input;
+
 	while (!game_state) {
 		game_state = engine2048->beginningPhase();
 		engine2048->printBoard();
@@ -46,15 +83,14 @@ int main(int argc, char* argv[]) {
 		if (!game_state) {
 			dir_success = false;
 			while (!dir_success) {
-				direction = chooseDirection();
+				direction = chooseDirection0();
 				dir_success = engine2048->mainPhase(direction);
 			}
-			board_state = engine2048->getHeldBoardState();
+			cycle.bstate = engine2048->getHeldBoardState();
+			cycle.direction = direction;
 
 			//	Save the data
-			for (int i=0; i<16; i++)
-				fout << board_state.sqr_val[i] << ",";
-			fout << direction << std::endl;
+			rawT->Fill();
 
 			engine2048->endPhase();
 		} else {
@@ -62,11 +98,12 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	delete engine2048;
-	fout.close();
+	rawT->Write();
+	outFile->Close();
 	return 0;
 }
 
-int chooseDirection() {
+int chooseDirection0() {
 	char direction[1];
 	std::cin >> direction[0];
 	switch(direction[0]) {
@@ -81,4 +118,3 @@ int chooseDirection() {
 	}
 	return 0;
 }
-

@@ -11,6 +11,8 @@ Engine2048::Engine2048() {
 	//	First starting piece
 	brd->generateEmptySquaresList();
 	brd->generateNewPiece();
+
+	gcycle = game_cycle;
 }
 
 Engine2048::~Engine2048() {
@@ -76,33 +78,34 @@ void Engine2048::endPhase() {
 }
 
 void Engine2048::printBoard() {
+	std::cout << "------------------------------------\n";
 	for (int y=3; y>=0; y--) {
-		std::cout << "----------------------------------\n";
-		std::cout << "|  ";
+		std::cout << "|        |        |        |        |\n";
+		std::cout << "|";
 		for (int x=0; x<4; x++) {
-			int value;
-			value = brd->getSquarePieceValue(x,y);
-			if (value) std::cout << value;
-			else std::cout << "  ";
-			if (x<3) std::cout << "  |  ";
-			else std::cout << "  |" << std::endl;
+			int value = brd->getSquarePieceValue(x,y);
+			if (value) std::cout << std::setw(6) << value << "  ";
+			else std::cout << std::setw(6) << "        ";
+			if (x<3) std::cout << "|"; 
+			else std::cout << "|\n";
 		}
+		std::cout << "|        |        |        |        |\n";
+		std::cout << "------------------------------------\n";
 	}
-	std::cout << "----------------------------------\n";
 }
 
 void Engine2048::holdBoardState() {
 	int count=0;
 	for (int y=3; y>=0; y--) {
 		for (int x=0; x<4; x++) {
-			board_state.sqr_val[count]=brd->getSquarePieceValue(x,y);
+			game_cycle[count]=brd->getSquarePieceValue(x,y);
 			count++;
 		}
 	}
 }
 
-bstate_t Engine2048::getHeldBoardState() {
-	return board_state;
+int *Engine2048::getHeldBoardState() {
+	return gcycle;
 }
 
 
