@@ -3,3 +3,4 @@ main
 *.swo
 *.o
 *.out
+./raw_player_data/*
